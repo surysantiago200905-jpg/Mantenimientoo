@@ -1,0 +1,7 @@
+{
+  "name": "MANTENIMIENTO",
+  "description": "A comprehensive maintenance management system for customs facilities featuring calendar scheduling, task tracking, invoice storage, and multi-user simulation.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
