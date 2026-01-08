@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import Calendar from './components/Calendar';
 import TaskForm from './components/TaskForm';
@@ -96,9 +96,14 @@ const App: React.FC = () => {
 
   const handleGetInsight = async (desc: string) => {
     setIsLoadingInsight(true);
-    const result = await getMaintenanceAdvice(desc);
-    setAiInsight(result);
-    setIsLoadingInsight(false);
+    try {
+      const result = await getMaintenanceAdvice(desc);
+      setAiInsight(result);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoadingInsight(false);
+    }
   };
 
   const renderDashboard = () => (
@@ -261,7 +266,7 @@ const App: React.FC = () => {
       )}
 
       {/* Modals */}
-      {(isTaskFormOpen || selectedTask && !selectedTask.id) && (
+      {(isTaskFormOpen || (selectedTask && !selectedTask.id)) && (
         <TaskForm 
           onSave={handleSaveTask} 
           onCancel={() => { setIsTaskFormOpen(false); setSelectedTask(null); }} 
@@ -307,8 +312,8 @@ const App: React.FC = () => {
                   <div className="flex items-center justify-between mb-4">
                     <h5 className="text-xs font-bold text-indigo-700 uppercase">IA Maintenance Insight</h5>
                     <button 
-                      onClick={() => handleGetInsight(selectedTask.description)}
-                      disabled={isLoadingInsight}
+                      onClick={() => selectedTask.description && handleGetInsight(selectedTask.description)}
+                      disabled={isLoadingInsight || !selectedTask.description}
                       className="text-[10px] bg-indigo-600 text-white px-2 py-1 rounded hover:bg-indigo-700 disabled:opacity-50"
                     >
                       {isLoadingInsight ? 'Analizando...' : 'Obtener Consejos'}

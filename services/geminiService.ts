@@ -1,20 +1,15 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-// Standard way to access the key, ensuring we don't crash if it's undefined initially
-const getAIClient = () => {
-  const apiKey = process.env.API_KEY;
-  if (!apiKey) {
-    console.warn("API_KEY no encontrada. Asegúrate de configurarla en las variables de entorno de Vercel.");
-    return null;
-  }
-  return new GoogleGenAI({ apiKey });
-};
-
 export const getMaintenanceAdvice = async (taskDescription: string) => {
+  const apiKey = process.env.API_KEY;
+  
+  if (!apiKey) {
+    throw new Error("The API_KEY environment variable is missing. Please configure it in your Vercel project settings.");
+  }
+
   try {
-    const ai = getAIClient();
-    if (!ai) return null;
+    const ai = new GoogleGenAI({ apiKey });
 
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
@@ -38,7 +33,10 @@ export const getMaintenanceAdvice = async (taskDescription: string) => {
       }
     });
 
-    return JSON.parse(response.text);
+    const text = response.text;
+    if (!text) return null;
+    
+    return JSON.parse(text);
   } catch (error) {
     console.error("Gemini Error:", error);
     return null;

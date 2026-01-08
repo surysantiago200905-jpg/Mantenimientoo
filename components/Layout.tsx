@@ -56,7 +56,7 @@ const Layout: React.FC<LayoutProps> = ({ children, currentUser, onSwitchUser, ac
         <div className="p-4 border-t border-slate-800">
           <div className="text-xs text-slate-500 mb-2 uppercase tracking-tighter px-2">Cambiar Usuario</div>
           <div className="space-y-2">
-            {USERS.map(u => (
+            {USERS.map((u: User) => (
               <button 
                 key={u.id}
                 onClick={() => onSwitchUser(u)}

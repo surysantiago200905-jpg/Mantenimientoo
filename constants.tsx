@@ -1,5 +1,5 @@
 
-import React from 'react';
+import { User } from './types';
 
 export const CUSTOMS_LOCATIONS = [
   { id: '1', name: 'Aduana de Nuevo Laredo', city: 'Tamaulipas', code: 'NL-01' },
@@ -8,7 +8,7 @@ export const CUSTOMS_LOCATIONS = [
   { id: '4', name: 'Aduana del Aeropuerto CDMX', city: 'Ciudad de México', code: 'AICM-04' },
 ];
 
-export const USERS = [
+export const USERS: User[] = [
   { id: 'u1', name: 'Carlos Rivera', role: 'Admin', avatar: 'https://picsum.photos/seed/carlos/100/100' },
   { id: 'u2', name: 'Ana Martinez', role: 'Manager', avatar: 'https://picsum.photos/seed/ana/100/100' },
   { id: 'u3', name: 'Luis Gomez', role: 'Technician', avatar: 'https://picsum.photos/seed/luis/100/100' },
