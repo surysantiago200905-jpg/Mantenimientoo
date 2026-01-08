@@ -1,13 +1,24 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+// Standard way to access the key, ensuring we don't crash if it's undefined initially
+const getAIClient = () => {
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+    console.warn("API_KEY no encontrada. Asegúrate de configurarla en las variables de entorno de Vercel.");
+    return null;
+  }
+  return new GoogleGenAI({ apiKey });
+};
 
 export const getMaintenanceAdvice = async (taskDescription: string) => {
   try {
+    const ai = getAIClient();
+    if (!ai) return null;
+
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: `Provide a brief list of safety steps and tools required for this infrastructure maintenance task: "${taskDescription}". Format as JSON.`,
+      contents: `Proporciona una lista breve de pasos de seguridad y herramientas necesarias para esta tarea de mantenimiento de infraestructura aduanera: "${taskDescription}". Responde en español y formato JSON.`,
       config: {
         responseMimeType: "application/json",
         responseSchema: {
